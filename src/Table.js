@@ -3,8 +3,13 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "./Firebase";
 import './Table.css';
-import image1 from './location.jpeg';
-import image2 from './selectedlocation.jpeg';
+import image1 from '../src/img/gym1.jpg';
+import image2 from '../src/img/gym2.jpg';
+import image3 from '../src/img/gym3.jpg';
+import image4 from '../src/img/gym4.jpg';
+import image5 from '../src/img/gym5.jpg';
+import image6 from '../src/img/gym6.jpeg';
+import image7 from '../src/img/gym7.jpg';
 
 const containerStyle = {
     width: '100%',
@@ -58,7 +63,7 @@ const locations = [
         gSize: [0, 1, 2],
         lat: -34.600,
         lng: 150.664,
-        image: image1
+        image: image3
     },
     {
         id: 4,
@@ -74,7 +79,7 @@ const locations = [
         gSize: [0, 1, 2],
         lat: -34.390,  // Adjusted for proximity
         lng: 150.650,
-        image: image2
+        image: image4
     },
     {
         id: 5,
@@ -90,7 +95,7 @@ const locations = [
         gSize: [1, 2],
         lat: -34.405,  // Adjusted for proximity
         lng: 150.655,
-        image: image1
+        image: image5
     },
     {
         id: 6,
@@ -106,7 +111,7 @@ const locations = [
         gSize: [0, 2],
         lat: -34.392,  // Adjusted for proximity
         lng: 150.660,
-        image: image2
+        image: image6
     },
     {
         id: 7,
@@ -122,7 +127,7 @@ const locations = [
         gSize: [0, 1, 2, 3],
         lat: -34.400,  // Adjusted for proximity
         lng: 150.635,
-        image: image1
+        image: image7
     }
 ];
 

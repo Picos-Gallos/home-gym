@@ -30,8 +30,8 @@ function Survey() {
     },
     {
       id: "budget",
-      text: "What is your budget?",
-      choices: ["Less than $50", "$50 - $100", "$100 - $200", "More than $200"],
+      text: "What is your budget per sesion?",
+      choices: ["Less than $10", "$11 - $20", "$21 - $30", "More than $30"],
     },
     {
       id: "schedule",
