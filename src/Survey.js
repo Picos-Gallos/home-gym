@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "./Firebase";
+import { useNavigate } from "react-router-dom";
 
 function Survey() {
   const [selectedChoices, setSelectedChoices] = useState({});
+  const navigate = useNavigate();
 
   const questions = [
     {
@@ -55,15 +57,18 @@ function Survey() {
     console.log("Current user: ", auth.currentUser);
     console.log("Selected choices: ", selectedChoices);
     try {
-        const log = await addDoc(collection(db, "users"), {
+        const log = await setDoc(doc(db, "users", auth.currentUser.uid), {
             email: auth.currentUser.email,
-            fitnessLevel: questions[0].choices[selectedChoices.fitnessLevel],
-            fitnessGoal: questions[1].choices[selectedChoices.fitnessGoal],
-            budget: questions[2].choices[selectedChoices.budget],
-            schedule: questions[3].choices[selectedChoices.schedule],
-            buddy: questions[4].choices[selectedChoices.buddy],
+            questions: [
+              selectedChoices.fitnessLevel,
+              selectedChoices.fitnessGoal,
+              selectedChoices.budget,
+              selectedChoices.schedule,
+              selectedChoices.buddy
+            ]
         });
         console.log("Survey submitted successfully!", log);
+        navigate("/table");
     } catch (error) {
         console.error("Error submitting survey: ", error);
     }
