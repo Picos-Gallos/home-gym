@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from './Firebase';
+import './index.css'; // Import the CSS file here
 
 function Register() {
     const [email, setEmail] = useState('');
@@ -39,13 +40,17 @@ function Register() {
 
     return (
         <>
-            <div className="login">
+          
+            <div className="wrapper">
+              <div className="login">
+                {/* <img src="/logo.png" alt='' className="register-image" /> */}
                 <h1>Register</h1>
-                <form onSubmit={register}>
+                <form onSubmit={register}>                 
                     <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
                     <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
                     <input type="submit" value="Submit" />
                 </form>
+                </div>
             </div>
         </>
     );
