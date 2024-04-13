@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import './Table.css'; // Make sure to import the CSS file
 
 const containerStyle = {
     width: '100%',
@@ -117,6 +118,16 @@ const locations = [
 
 const Table = () => {
     const [selectedLocation, setSelectedLocation] = useState(null);
+
+    // Add the class when the component mounts and remove when it unmounts
+    useEffect(() => {
+        document.body.classList.add('body-with-table');
+
+        // Cleanup function to remove the class when the component unmounts
+        return () => {
+            document.body.classList.remove('body-with-table');
+        };
+    }, []);
 
     const handleSelectLocation = (location) => {
         setSelectedLocation(location);
