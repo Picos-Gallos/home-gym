@@ -22,7 +22,7 @@ function Register() {
               .then((userCredential) => {
                 var user = userCredential.user;
                 console.log('User logged in: ', user);
-                navigate('/app');
+                navigate('/table');
               })
               .catch((error) => {
                 var errorCode = error.code;
@@ -44,7 +44,7 @@ function Register() {
                 <form onSubmit={register}>
                     <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
                     <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-                    <input type="submit" style={{ backgroundColor: "#2c5237" }} />
+                    <input type="submit" value="Submit" />
                 </form>
             </div>
         </>
