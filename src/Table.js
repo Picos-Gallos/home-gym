@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import './Table.css'; // Make sure to import the CSS file
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "./Firebase";
 
 const containerStyle = {
     width: '100%',
@@ -16,10 +17,10 @@ const locations = [
         amenities: ["Treadmill", "Elliptical machine", "Free weights", "Yoga mats", "Water dispenser", "Towels", "Wi-Fi access", "Changing room and showers"],
         host: "Matthew Thompson",
         email: "matt.thompson25@gmail.com",
-        flevel: ["0","1", "2", "3"],
-        goalVal: ["0", "1", "2"],
-        timeAvail: ["2", "3"],
-        gSize: ["0", "1", "2"],
+        flevel: [0, 1, 2, 3],
+        goalVal: [0, 1, 2],
+        timeAvail: [2, 3],
+        gSize: [0, 1, 2],
         lat: -34.397,
         lng: 150.644
     },
@@ -31,10 +32,10 @@ const locations = [
         amenities: ["Weight machines", "Cardio machines", "Workout accessories", "Personal trainer available", "Water station", "Towels", "Wi-Fi access"],
         host: "Jessica Taylor",
         email: "jtaylor@hotmail.com",
-        flevel: ["0","1", "2"],
-        goalVal: ["0", "1", "2"],
-        timeAvail: ["0", "1"],
-        gSize: ["0", "1", "2", "3"],
+        flevel: [0, 1, 2],
+        goalVal: [0, 1, 2],
+        timeAvail: [0, 1],
+        gSize: [0, 1, 2, 3],
         lat: -34.500,
         lng: 150.654
     },
@@ -46,10 +47,10 @@ const locations = [
         amenities: ["Peloton bike", "Rowing machine", "Free weights", "Sauna", "Steam room", "Massage chair", "Towels", "Water station", "Wi-Fi access"],
         host: "David Lee",
         email: "dlee1@gmail.com",
-        flevel: ["0", "1", "2"],
-        goalVal: ["0", "1", "2", "3"],
-        timeAvail: ["0", "1", "2"],
-        gSize: ["0", "1", "2"],
+        flevel: [0, 1, 2],
+        goalVal: [0, 1, 2, 3],
+        timeAvail: [0, 1, 2],
+        gSize: [0, 1, 2],
         lat: -34.600,
         lng: 150.664
     },
@@ -61,10 +62,10 @@ const locations = [
         amenities: ["Peloton bike", "Rowing machine", "Free weights", "Sauna", "Steam room", "Massage chair", "Towels", "Bathrobes", "Refreshments", "Wi-Fi access"],
         host: "Emily Wong",
         email: "emily.wong@att.net",
-        flevel: ["0", "1", "2"],
-        goalVal: ["0", "1", "2", "3"],
-        timeAvail: ["0", "1", "3"],
-        gSize: ["0", "1", "2"],
+        flevel: [0, 1, 2],
+        goalVal: [0, 1, 2, 3],
+        timeAvail: [0, 1, 3],
+        gSize: [0, 1, 2],
         lat: -34.390,  // Adjusted for proximity
         lng: 150.650
     },
@@ -76,10 +77,10 @@ const locations = [
         amenities: ["Cardio machines", "Strength training equipment", "Kids' play area", "Family-friendly atmosphere", "Water fountain", "Towels", "Wi-Fi access"],
         host: "Alex Patel",
         email: "alxptl@gmail.com",
-        flevel: ["0", "1", "2"],
-        goalVal: ["0", "1"],
-        timeAvail: ["0", "1", "2"],
-        gSize: ["1", "2"],
+        flevel: [0, 1, 2],
+        goalVal: [0, 1],
+        timeAvail: [0, 1, 2],
+        gSize: [1, 2],
         lat: -34.405,  // Adjusted for proximity
         lng: 150.655
     },
@@ -91,10 +92,10 @@ const locations = [
         amenities: ["Cardio machines", "Weightlifting equipment", "Yoga corner", "Ambient lighting", "Complimentary tea/coffee", "Towels", "Wi-Fi access"],
         host: "Ezmeralda Miller",
         email: "ezmiller14@yahoo.com",
-        flevel: ["0", "1", "2"],
-        goalVal: ["0", "1", "2", "3"],
-        timeAvail: ["0", "1", "2"],
-        gSize: ["0", "2"],
+        flevel: [0, 1, 2],
+        goalVal: [0, 1, 2, 3],
+        timeAvail: [0, 1, 2],
+        gSize: [0, 2],
         lat: -34.392,  // Adjusted for proximity
         lng: 150.660
     },
@@ -106,27 +107,61 @@ const locations = [
         amenities: ["Outdoor cardio machines", "Free weights", "Resistance bands", "Picnic area", "Restrooms", "Drinking water fountain", "Wi-Fi access"],
         host: "Davinh Lee",
         email: "davlee42@mailbox.org",
-        flevel: ["0", "1"],
-        goalVal: ["0", "1", "2"],
-        timeAvail: ["0", "1", "2"],
-        gSize: ["0", "1", "2", "3"],
+        flevel: [0, 1],
+        goalVal: [0, 1, 2],
+        timeAvail: [0, 1, 2],
+        gSize: [0, 1, 2, 3],
         lat: -34.400,  // Adjusted for proximity
         lng: 150.635
     }
 ];
 
-
 const Table = () => {
     const [selectedLocation, setSelectedLocation] = useState(null);
+    const [sortedLocations, setSortedLocations] = useState([]);
 
-    // Add the class when the component mounts and remove when it unmounts
     useEffect(() => {
-        document.body.classList.add('body-with-table');
-
-        // Cleanup function to remove the class when the component unmounts
-        return () => {
-            document.body.classList.remove('body-with-table');
+        const sortPriority = async () => {
+            let values = [];
+            try {
+                const docSnap = await getDoc(doc(db, "users", auth.currentUser.uid));
+                if (docSnap.exists()) {
+                    values = docSnap.data().questions;
+                    console.log("Document data:", values);
+                    const sorted = locations.map(location => {
+                        location.priority = 0;
+                        location.flevel.forEach(flevel => {
+                            if (values[0] === flevel) {
+                                location.priority += 1;
+                            }
+                        });
+                        location.goalVal.forEach(goalVal => {
+                            if (values[1] === goalVal) {
+                                location.priority += 1;
+                            }
+                        });
+                        location.timeAvail.forEach(timeAvail => {
+                            if (values[2] === timeAvail) {
+                                location.priority += 1;
+                            }
+                        });
+                        location.gSize.forEach(gSize => {
+                            if (values[3] === gSize) {
+                                location.priority += 1;
+                            }
+                        });
+                        return location;
+                    }).sort((a, b) => b.priority - a.priority);
+                    console.log(sorted);
+                    setSortedLocations(sorted);
+                } else {
+                    console.log("No such document!");
+                }
+            } catch (error) {
+                console.error("Error getting document:", error);
+            }
         };
+        sortPriority();
     }, []);
 
     const handleSelectLocation = (location) => {
@@ -139,8 +174,9 @@ const Table = () => {
                 <h1>Home Gym Rentals</h1>
                 <table style={{ width: '100%' }}>
                     <tbody>
-                    {locations.map(location => (
+                    {sortedLocations.map((location, index) => (
                         <tr key={location.id}>
+                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{index + 1}.</td>
                             <td style={{ padding: '8px', border: '1px solid #ccc' }}>{location.name}</td>
                             <td style={{ padding: '8px', textAlign: 'center', border: '1px solid #ccc' }}>
                                 <button onClick={() => handleSelectLocation(location)}>Details</button>
@@ -170,7 +206,7 @@ const Table = () => {
                         center={selectedLocation ? { lat: selectedLocation.lat, lng: selectedLocation.lng } : { lat: -34.397, lng: 150.644 }}
                         zoom={selectedLocation ? 15 : 10}
                     >
-                        {locations.map(loc => (
+                        {sortedLocations.map(loc => (
                             <Marker
                                 key={loc.id}
                                 position={{ lat: loc.lat, lng: loc.lng }}
