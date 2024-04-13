@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function Survey() {
   const [selectedChoices, setSelectedChoices] = useState({});
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const questions = [
@@ -54,6 +55,16 @@ function Survey() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const isAllQuestionsAnswered = questions.every((question) => {
+        return selectedChoices[question.id] !== undefined;
+    });
+
+    if (!isAllQuestionsAnswered) {
+        setError("Please answer all questions");
+        return;
+    }
+
     console.log("Current user: ", auth.currentUser);
     console.log("Selected choices: ", selectedChoices);
     try {
@@ -70,14 +81,16 @@ function Survey() {
         console.log("Survey submitted successfully!", log);
         navigate("/table");
     } catch (error) {
-        console.error("Error submitting survey: ", error);
+        if (error.code === "permission-denied") {
+            setError("You need to be logged in to submit the survey");
+        }
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {questions.map((question) => (
-        <div key={question.id}>
+        <div key={question.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <h3>{question.text}</h3>
           {question.choices.map((choice, index) => (
             <div key={index}>
@@ -94,7 +107,8 @@ function Survey() {
           ))}
         </div>
       ))}
-      <input type="submit" value="Submit" />
+      <input type="submit" value="Submit" style={{ width: '100px', margin: '20px auto', display: 'block' }} />
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
     </form>
   );
 }

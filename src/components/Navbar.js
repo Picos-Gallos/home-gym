@@ -7,7 +7,7 @@ function Navbar() {
         <nav className="navbar">
             <div className="logo">
                 
-                <img src={GymIcon} alt="Gym Icon" style={{ width: '30px', height: '30px', marginLeft: '10px', marginRight: '10px' }} />
+                <a href="/"><img src={GymIcon} alt="Gym Icon" style={{ width: '30px', height: '30px', marginLeft: '10px', marginRight: '10px' }} /></a>
                 HomeGym 
             </div>
             <ul className="nav-links">
