@@ -56,7 +56,7 @@ function Survey() {
     console.log("Selected choices: ", selectedChoices);
     try {
         const log = await addDoc(collection(db, "users"), {
-            userId: auth.currentUser.uid,
+            email: auth.currentUser.email,
             fitnessLevel: questions[0].choices[selectedChoices.fitnessLevel],
             fitnessGoal: questions[1].choices[selectedChoices.fitnessGoal],
             budget: questions[2].choices[selectedChoices.budget],
