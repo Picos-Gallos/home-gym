@@ -50,7 +50,7 @@ function Register() {
   return (
     <>
       <div className="login">
-        <h1>Register</h1>
+        <h1>Register/Sign in</h1>
         <form onSubmit={register}>
           <input
             type="email"
