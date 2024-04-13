@@ -18,4 +18,4 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOMEGYM_85E6D }}'
-          projectId: homegym-85e6d
+          projectId: home-gym-29c56
