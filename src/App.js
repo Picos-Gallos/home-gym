@@ -3,6 +3,7 @@ import Register from './Register';
 import Survey from './Survey';
 import Table from './Table';
 import Navbar from './components/Navbar';
+import About from "./About";
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
                 <Route path="/" element={<Register />} />
                 <Route path="/survey" element={<Survey />} />
                 <Route path="/table" element={<Table />} />
+                <Route path="/about" element={<About />} />
             </Routes>
         </>
     );
