@@ -1,31 +1,48 @@
 import React from 'react';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-const users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-    { id: 3, name: 'Bob Johnson', email: 'bob@example.com' },
+const containerStyle = {
+    width: '400px',
+    height: '400px'
+};
+
+const center = {
+    lat: -34.397,
+    lng: 150.644
+};
+
+const locations = [
+    { id: 1, name: "John Doe", equipment: ["Peleton", "Smith Machine"], lat: -34.397, lng: 150.644, email: 'john@example.com'},
+    { id: 2, name: "Jane Smith", equipment: ["Treadmill"], lat: -34.500, lng: 150.644, email: 'jane@example.com'},
+    // Add more locations as needed
 ];
 
-function Table() {
+const Table = () => {
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {users.map((user) => (
-                    <tr key={user.id}>
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+                <h1>Home Gym Equipment Owners</h1>
+                <ul>
+                    {locations.map(location => (
+                        <li key={location.id}>
+                            {location.name} - {location.equipment.join(", ")}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <LoadScript
+                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={10}
+                >
+                    {locations.map(loc => (
+                        <Marker key={loc.id} position={{ lat: loc.lat, lng: loc.lng }} />
+                    ))}
+                </GoogleMap>
+            </LoadScript>
+        </div>
     );
 };
 
