@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "./Firebase";
+import './Table.css';
+import image1 from './location.jpeg';
+import image2 from './selectedlocation.jpeg';
 
 const containerStyle = {
     width: '100%',
@@ -22,7 +25,8 @@ const locations = [
         timeAvail: [2, 3],
         gSize: [0, 1, 2],
         lat: -34.397,
-        lng: 150.644
+        lng: 150.644,
+        image: image1
     },
     {
         id: 2,
@@ -37,7 +41,8 @@ const locations = [
         timeAvail: [0, 1],
         gSize: [0, 1, 2, 3],
         lat: -34.500,
-        lng: 150.654
+        lng: 150.654,
+        image: image2
     },
     {
         id: 3,
@@ -52,7 +57,8 @@ const locations = [
         timeAvail: [0, 1, 2],
         gSize: [0, 1, 2],
         lat: -34.600,
-        lng: 150.664
+        lng: 150.664,
+        image: image1
     },
     {
         id: 4,
@@ -67,7 +73,8 @@ const locations = [
         timeAvail: [0, 1, 3],
         gSize: [0, 1, 2],
         lat: -34.390,  // Adjusted for proximity
-        lng: 150.650
+        lng: 150.650,
+        image: image2
     },
     {
         id: 5,
@@ -82,7 +89,8 @@ const locations = [
         timeAvail: [0, 1, 2],
         gSize: [1, 2],
         lat: -34.405,  // Adjusted for proximity
-        lng: 150.655
+        lng: 150.655,
+        image: image1
     },
     {
         id: 6,
@@ -97,7 +105,8 @@ const locations = [
         timeAvail: [0, 1, 2],
         gSize: [0, 2],
         lat: -34.392,  // Adjusted for proximity
-        lng: 150.660
+        lng: 150.660,
+        image: image2
     },
     {
         id: 7,
@@ -112,7 +121,8 @@ const locations = [
         timeAvail: [0, 1, 2],
         gSize: [0, 1, 2, 3],
         lat: -34.400,  // Adjusted for proximity
-        lng: 150.635
+        lng: 150.635,
+        image: image1
     }
 ];
 
@@ -171,26 +181,30 @@ const Table = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', height: '100vh', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '300px', overflowY: 'auto', padding: '10px' }}>
-                <h1 style={{ fontSize: '20px', fontFamily: 'Frutiger Linotype', fontWeight: 'normal', marginBottom: '15px', marginLeft: '15px' }}>Home Gym Rentals</h1>
+                <h1 style={{ fontSize: '20px', fontFamily: 'Frutiger Linotype', fontWeight: 'normal', marginBottom: '15px', marginLeft: '15px' }}>For you Page</h1>
                 <table style={{ width: '100%' }}>
                     <tbody>
                     {sortedLocations.map((location, index) => (
                         <tr key={location.id}>
-                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{index + 1}.</td>
-                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{location.name}</td>
-                            <td style={{ padding: '8px', textAlign: 'center', border: '1px solid #ccc' }}>
-                                <button onClick={() => handleSelectLocation(location)}>Details</button>
+                            <td style={{padding: '8px', border: '1px solid #ccc', cursor: 'pointer'}}
+                                onClick={() => handleSelectLocation(location)}>
+                                {location.name}
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
-            <div style={{ flex: 2, minWidth: '300px', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc' }}>
+            <div style={{
+                flex: 2,
+                minWidth: '300px',
+                padding: '10px',
+                borderLeft: '1px solid #ccc',
+                borderRight: '1px solid #ccc' }}>
             {selectedLocation ? (
                 <div>
                     <h2>{selectedLocation.name}</h2>
-                    <img src={selectedLocation.image} alt={selectedLocation.name} />
+                    <img  src={selectedLocation.image} alt={selectedLocation.name} style={{ width: '500px', height: '500px', marginLeft: '10px', marginRight: '10px' }}/>
                     <div className="detail-section">
                         <p><strong>Description:</strong> {selectedLocation.description}</p>
                     </div>
