@@ -136,33 +136,42 @@ const Table = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', height: '100vh', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '300px', overflowY: 'auto', padding: '10px' }}>
-                <h1>Home Gym Rentals</h1>
+                <h1 style={{ fontSize: '20px', fontFamily: 'Frutiger Linotype', fontWeight: 'normal', marginBottom: '15px', marginLeft: '15px' }}>Home Gym Rentals</h1>
                 <table style={{ width: '100%' }}>
                     <tbody>
                     {locations.map(location => (
-                        <tr key={location.id}>
-                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{location.name}</td>
-                            <td style={{ padding: '8px', textAlign: 'center', border: '1px solid #ccc' }}>
-                                <button onClick={() => handleSelectLocation(location)}>Details</button>
-                            </td>
-                        </tr>
+                        <div key={location.id} className="listing-card" onClick={() => handleSelectLocation(location)}>
+                            <h3>{location.name}</h3>
+                            <img src={location.image} alt={location.name} />
+                        </div>
                     ))}
                     </tbody>
                 </table>
             </div>
             <div style={{ flex: 2, minWidth: '300px', padding: '10px', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc' }}>
-                {selectedLocation ? (
-                    <div>
+            {selectedLocation ? (
+                <div>
+                    <h2>{selectedLocation.name}</h2>
+                    <img src={selectedLocation.image} alt={selectedLocation.name} />
+                    <div className="detail-section">
                         <p><strong>Description:</strong> {selectedLocation.description}</p>
+                    </div>
+                    <div className="detail-section">
                         <p><strong>Price:</strong> {Object.entries(selectedLocation.price).map(([key, value]) => <div key={key}>{key}: {value}</div>)}</p>
+                    </div>
+                    <div className="detail-section">
                         <p><strong>Amenities:</strong> {selectedLocation.amenities.join(", ")}</p>
+                    </div>
+                    <div className="detail-section">
                         <p><strong>Host:</strong> {selectedLocation.host}</p>
                         <p><strong>Email:</strong> {selectedLocation.email}</p>
                     </div>
-                ) : (
-                    <p>Select a location to see details</p>
-                )}
-            </div>
+                </div>
+            ) : (
+                <p>Select a location to see details</p>
+            )}
+        </div>
+
             <div style={{ flex: 2, minWidth: '300px', height: '100%' }}>
                 <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
                     <GoogleMap

@@ -1,8 +1,102 @@
-.body-with-table {
-    display: block;
-    height: auto;
-    width: 100%;
-    min-height: 100vh;
+/* Table.css */
+
+/* General styles */
+body {
     margin: 0;
-    background-color: #f0f0f0; /* Maintain the same background */
+    font-family: Arial, sans-serif;
+  }
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #ffbfd9;
+    text-align: center;
+    }
+  
+  /* Container styles */
+  .container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    flex-wrap: wrap;
+  }
+  
+  /* Left panel styles */
+  .left-panel {
+    flex: 1;
+    min-width: 300px;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  /* Table styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  td {
+    padding: 8px;
+    border: 1px solid #499365;
+  }
+  
+  /* Button styles */
+  button {
+    padding: 5px 10px;
+    background-color: #418a5b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #8bd985;
+  }
+  
+  /* Right panel styles */
+  .right-panel {
+    flex: 2;
+    min-width: 300px;
+    padding: 10px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+  
+  /* Map panel styles */
+  .map-panel {
+    flex: 2;
+    min-width: 300px;
+    height: 100%;
+  }
+  
+  .listing-card {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.listing-card:hover {
+    border-color: #4a6e26;
+}
+
+.listing-card h3 {
+    margin-top: 0;
+}
+
+.listing-card p {
+    margin-bottom: 0;
+}
+
+.detail-section {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
